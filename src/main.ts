@@ -3,7 +3,7 @@ import "./style.css";
 // Value Variables
 let count = 0;
 let prevTime = performance.now();
-const valueFraction = 1;
+let valueFraction = 0;
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
@@ -24,13 +24,14 @@ app.append(button);
 function countUpdate() {
   buttonCounter.innerHTML = count + " bears angered";
 }
-function counterGrowth(){
+function counterGrowth() {
   const now = performance.now();
   const timeDif = now - prevTime;
   prevTime = now;
 
   const increaseAmount = (timeDif / 1000) * valueFraction;
   count += increaseAmount;
+  upgradeButton.disabled = 10 > count;
   countUpdate();
   requestAnimationFrame(counterGrowth);
 }
@@ -49,3 +50,15 @@ button.addEventListener("click", () => {
 }, 1000);*/
 
 requestAnimationFrame(counterGrowth);
+
+const upgradeButton = document.createElement("button");
+upgradeButton.innerHTML = "Bear spray";
+upgradeButton.disabled = true;
+app.append(upgradeButton);
+
+upgradeButton.addEventListener("click", () => {
+  if(count >= 10){
+    count -= 10;
+    valueFraction += 1;
+  }
+})
