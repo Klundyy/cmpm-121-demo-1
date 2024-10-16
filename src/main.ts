@@ -19,11 +19,19 @@ button.style.borderColor = "black";
 button.style.webkitTextFillColor = "white";
 app.append(button);
 
-const buttonCounter =  document.createElement("div");
-buttonCounter.innerHTML = (count + " bears angered");
+function countUpdate(){
+    buttonCounter.innerHTML = count + " bears angered";
+}
+
+const buttonCounter = document.createElement("div");
+countUpdate();
 app.append(buttonCounter);
 
 button.addEventListener("click", () => {
-    count+=1;
-    buttonCounter.innerHTML = (count + " bears angered");
+  count += 1;
+  countUpdate();
 });
+setInterval(()=> {
+    count += 1;
+    countUpdate();
+}, 1000)
