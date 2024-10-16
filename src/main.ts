@@ -1,5 +1,8 @@
 import "./style.css";
 
+// Value Variables
+let count = 0;
+
 const app: HTMLDivElement = document.querySelector("#app")!;
 
 const gameName = "Kuma Clicker";
@@ -11,6 +14,16 @@ app.append(header);
 
 const button = document.createElement("button");
 button.innerHTML = "🐻";
-button.style.backgroundColor = "grey";
+button.style.backgroundColor = "white";
+button.style.borderColor = "black";
 button.style.webkitTextFillColor = "white";
 app.append(button);
+
+const buttonCounter =  document.createElement("div");
+buttonCounter.innerHTML = (count + " bears angered");
+app.append(buttonCounter);
+
+button.addEventListener("click", () => {
+    count+=1;
+    buttonCounter.innerHTML = (count + " bears angered");
+});
