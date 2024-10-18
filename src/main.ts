@@ -1,16 +1,18 @@
 import "./style.css";
 
 interface Item {
-  name: string,
-  cost: number,
-  rate: number,
-  count: number,
-};
+  name: string;
+  cost: number;
+  rate: number;
+  count: number;
+  description: string;
+}
 
 // Value Variables
 let count = 0;
 let prevTime = performance.now();
 let valueFraction = 0;
+let killedBear = false;
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
@@ -36,9 +38,14 @@ countUpdate();
 app.append(buttonCounter);
 
 const growthDisplay = document.createElement("div");
+app.append(growthDisplay);
 
 function countUpdate() {
-  buttonCounter.innerHTML = count.toFixed(1) + " bears angered";
+  if(killedBear){
+    buttonCounter.innerHTML = count.toFixed(1) + " bears killed";
+  } else{
+    buttonCounter.innerHTML = count.toFixed(1) + " bears angered";
+  }
 }
 function counterGrowth() {
   // Get time passed
@@ -64,9 +71,11 @@ requestAnimationFrame(counterGrowth);
 
 // List of upgrades
 const upgradeList: Item[] = [
-  { name: "Bear Spray", cost: 10, rate: 0.1, count: 0 },
-  { name: "Bear Box📦", cost: 100, rate: 2.0, count: 0 },
-  { name: "Tranquilizer Dart💉", cost: 1000, rate: 50.0, count: 0 },
+  { name: "Bear Spray", cost: 10, rate: 0.1, count: 0 , description: "Protect yourself but only yourself"},
+  { name: "Bear Box📦", cost: 100, rate: 2.0, count: 0,  description: "Protect your food"},
+  { name: "Tranquilizer Dart💉", cost: 1000, rate: 50.0, count: 0 , description: "I hope this works"},
+  { name: "Bigger Bear Gun🔫", cost: 5000, rate: 250.0, count: 0 , description: "This will work better"},
+  { name: "Destroy Bear💀", cost: 50000, rate: 2500.0, count: 0 , description: "Your last hope"}
 ];
 const upgradeButtonList: HTMLButtonElement[] = [];
 
@@ -76,6 +85,7 @@ upgradeList.forEach((upgrade) => {
   upgradeButton.innerHTML = `${upgrade.name} (Cost: ${upgrade.cost})`;
   upgradeButton.disabled = true;
   upgradeButtonList.push(upgradeButton);
+  upgradeButton.title = upgrade.description;
   const upgradePurchase = document.createElement("div");
   upgradePurchase.innerHTML = `${upgrade.name} (Purchased: ${upgrade.count})`;
   upgradeButton.addEventListener("click", () => {
@@ -86,6 +96,10 @@ upgradeList.forEach((upgrade) => {
       upgrade.cost *= 1.15;
       upgradeButton.innerHTML = `${upgrade.name} (Cost: ${upgrade.cost.toFixed(2)})`;
       upgradePurchase.innerHTML = `${upgrade.name} (Purchased: ${upgrade.count})`;
+      if(upgrade.name == "Destroy Bear💀"){
+        button.innerHTML = "💀"
+        killedBear = true;
+      }
     }
   });
   app.append(upgradeButton);
@@ -97,5 +111,3 @@ function unlockUpgrade() {
     upgradeButtonList[index].disabled = count < upgrade.cost;
   });
 }
-
-app.append(growthDisplay);
