@@ -21,8 +21,14 @@ button.style.borderColor = "black";
 button.style.webkitTextFillColor = "white";
 app.append(button);
 
+const buttonCounter = document.createElement("div");
+countUpdate();
+app.append(buttonCounter);
+
+const growthDisplay = document.createElement("div");
+
 function countUpdate() {
-  buttonCounter.innerHTML = count + " bears angered";
+  buttonCounter.innerHTML = count.toFixed(1) + " bears angered";
 }
 function counterGrowth() {
   const now = performance.now();
@@ -31,34 +37,48 @@ function counterGrowth() {
 
   const increaseAmount = (timeDif / 1000) * valueFraction;
   count += increaseAmount;
-  upgradeButton.disabled = 10 > count;
+  growthDisplay.innerHTML = `Growth rate: ${valueFraction.toFixed(1)}`;
+  unlockUpgrade();
   countUpdate();
   requestAnimationFrame(counterGrowth);
 }
-
-const buttonCounter = document.createElement("div");
-countUpdate();
-app.append(buttonCounter);
 
 button.addEventListener("click", () => {
   count += 1;
   countUpdate();
 });
-/*setInterval(() => {
-  count += 1;
-  countUpdate();
-}, 1000);*/
-
 requestAnimationFrame(counterGrowth);
 
-const upgradeButton = document.createElement("button");
-upgradeButton.innerHTML = "Bear spray";
-upgradeButton.disabled = true;
-app.append(upgradeButton);
+const upgradeList = [
+  { name: "Bear Spray", cost: 10, rate: 0.1, count: 0 },
+  { name: "Bear Box", cost: 100, rate: 2.0, count: 0 },
+  { name: "Tranquilizer Dart", cost: 1000, rate: 50.0, count: 0 },
+];
+const upgradeButtonList: HTMLButtonElement[] = [];
 
-upgradeButton.addEventListener("click", () => {
-  if(count >= 10){
-    count -= 10;
-    valueFraction += 1;
-  }
-})
+upgradeList.forEach((upgrade) => {
+  const upgradeButton = document.createElement("button");
+  upgradeButton.innerHTML = `${upgrade.name} (Cost: ${upgrade.cost})`;
+  upgradeButton.disabled = true;
+  upgradeButtonList.push(upgradeButton);
+  const upgradePurchase = document.createElement("div");
+  upgradePurchase.innerHTML = `${upgrade.name} (Purchased: ${upgrade.count})`;
+  upgradeButton.addEventListener("click", () => {
+    if (count >= upgrade.cost) {
+      count -= upgrade.cost;
+      valueFraction += upgrade.rate;
+      upgrade.count += 1;
+      upgradeButton.innerHTML = `${upgrade.name} (Cost: ${upgrade.cost})`;
+      upgradePurchase.innerHTML = `${upgrade.name} (Purchased: ${upgrade.count})`;
+    }
+  });
+  app.append(upgradeButton);
+  app.append(upgradePurchase);
+});
+function unlockUpgrade() {
+  upgradeList.forEach((upgrade, index) => {
+    upgradeButtonList[index].disabled = count < upgrade.cost;
+  });
+}
+
+app.append(growthDisplay);
