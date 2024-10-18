@@ -68,7 +68,8 @@ upgradeList.forEach((upgrade) => {
       count -= upgrade.cost;
       valueFraction += upgrade.rate;
       upgrade.count += 1;
-      upgradeButton.innerHTML = `${upgrade.name} (Cost: ${upgrade.cost})`;
+      upgrade.cost *= 1.15;
+      upgradeButton.innerHTML = `${upgrade.name} (Cost: ${upgrade.cost.toFixed(2)})`;
       upgradePurchase.innerHTML = `${upgrade.name} (Purchased: ${upgrade.count})`;
     }
   });
