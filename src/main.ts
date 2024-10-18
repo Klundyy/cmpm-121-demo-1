@@ -1,5 +1,12 @@
 import "./style.css";
 
+interface Item {
+  name: string,
+  cost: number,
+  rate: number,
+  count: number,
+};
+
 // Value Variables
 let count = 0;
 let prevTime = performance.now();
@@ -56,7 +63,7 @@ button.addEventListener("click", () => {
 requestAnimationFrame(counterGrowth);
 
 // List of upgrades
-const upgradeList = [
+const upgradeList: Item[] = [
   { name: "Bear Spray", cost: 10, rate: 0.1, count: 0 },
   { name: "Bear Box📦", cost: 100, rate: 2.0, count: 0 },
   { name: "Tranquilizer Dart💉", cost: 1000, rate: 50.0, count: 0 },
