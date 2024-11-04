@@ -13,6 +13,8 @@ let count = 0;
 let prevTime = performance.now();
 let growthFactor = 0;
 let killedBear = false;
+const upgradeCostMultiplier = 1.15;
+const clickAmount = 1;
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
@@ -64,7 +66,7 @@ function counterGrowth() {
 
 // Button click handler
 button.addEventListener("click", () => {
-  count += 1;
+  count += clickAmount;
   countUpdate();
 });
 requestAnimationFrame(counterGrowth);
@@ -123,7 +125,7 @@ upgradeList.forEach((upgrade) => {
       count -= upgrade.cost;
       growthFactor += upgrade.rate;
       upgrade.amount += 1;
-      upgrade.cost *= 1.15;
+      upgrade.cost *= upgradeCostMultiplier;
       upgradeButton.innerHTML = `${upgrade.name} (Cost: ${upgrade.cost.toFixed(2)})`;
       upgradePurchase.innerHTML = `${upgrade.name} (Purchased: ${upgrade.amount})`;
       if (upgrade.name == "Destroy Bear💀") {
